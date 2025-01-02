@@ -1,0 +1,8 @@
+# See <https://git-scm.com/docs/gitignore>.
+
+.Rapp.history
+.RData
+.Renviron
+.Rhistory
+.Rproj.user
+.Ruserdata
