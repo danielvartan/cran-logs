@@ -3,6 +3,11 @@
   font-weight: bold;
 }
 
+.assertion {
+  color:  red;
+  font-weight: bold;
+}
+
 .sidepanel-stats {
   color:  #0559BE;
   font-weight: bold;
