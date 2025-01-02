@@ -267,6 +267,13 @@ server <- function(input, output, session) { #nolint
         ) |>
         dplyr::select(date, count, cum_sum) |>
         dplyr::slice(seq(which(.data$count > 0)[1], dplyr::n())) |>
+        dplyr::summarise(
+          dplyr::across(
+            .cols = dplyr::where(is.numeric),
+            .fns = ~ mean(.x, na.rm = TRUE)
+          ),
+          .by = "date"
+        ) |>
         tsibble::as_tsibble(index = date)
     } else {
       tsibble::tibble(
@@ -294,43 +301,60 @@ server <- function(input, output, session) { #nolint
   ## Compute value box statistics -----
 
   output$total <- shiny::reactive({
-    filtered_data() |>
-      dplyr::pull(count) |>
-      sum(na.rm = TRUE)
-  }) |>
-    shiny::bindEvent({is_valid_package() == TRUE})
+    if (isTRUE(is_valid_package())) {
+      filtered_data() |>
+        dplyr::pull(count) |>
+        sum(na.rm = TRUE)
+    } else {
+      as.numeric(NA)
+    }
+  })
 
   output$last_month <- shiny::reactive({
-    filtered_data() |>
-      sum_interval(get_last_month(Sys.Date()))
+    if (isTRUE(is_valid_package())) {
+      filtered_data() |> sum_interval(get_last_month(Sys.Date()))
+    } else {
+      as.numeric(NA)
+    }
   })
 
   output$last_week <- shiny::reactive({
-    filtered_data() |>
-      sum_interval(get_last_week(Sys.Date()))
+    if (isTRUE(is_valid_package())) {
+      filtered_data() |> sum_interval(get_last_week(Sys.Date()))
+    } else {
+      as.numeric(NA)
+    }
   })
 
   output$last_day <- shiny::reactive({
-    filtered_data() |>
-      dplyr::slice(nrow(filtered_data()) - 1) |>
-      dplyr::pull(count) |>
-      sum(na.rm = TRUE)
+    if (isTRUE(is_valid_package())) {
+      filtered_data() |>
+        dplyr::slice(nrow(filtered_data()) - 1) |>
+        dplyr::pull(count) |>
+        sum(na.rm = TRUE)
+    } else {
+      as.numeric(NA)
+    }
   })
 
   ## Compute sidebar plot and statistics -----
 
   .data <- shiny::reactive({
-    if (input$view == "daily") {
-      out <- filtered_data()
-    } else if (input$view == "weekly") {
-      out <- filtered_data() |> aggregate_tsibble_index("week")
-    } else if (input$view == "monthly") {
-      out <- filtered_data() |> aggregate_tsibble_index("month")
-    } else if (input$view == "yearly") {
-      out <- filtered_data() |> aggregate_tsibble_index("year")
-    }
+    if (isTRUE(is_valid_package())) {
+      if (input$view == "daily") {
+        out <- filtered_data()
+      } else if (input$view == "weekly") {
+        out <- filtered_data() |> aggregate_tsibble_index("week")
+      } else if (input$view == "monthly") {
+        out <- filtered_data() |> aggregate_tsibble_index("month")
+      } else if (input$view == "yearly") {
+        out <- filtered_data() |> aggregate_tsibble_index("year")
+      }
 
-    out |> dplyr::mutate(cum_sum = cumsum(count))
+      out |> dplyr::mutate(cum_sum = cumsum(count))
+    } else {
+      filtered_data()
+    }
   })
 
   output$mean <- shiny::reactive({
@@ -346,54 +370,59 @@ server <- function(input, output, session) { #nolint
   })
 
   plot <- shiny::reactive({
-    if (input$cumulative |> as.logical() |> isFALSE()) {
-      out <-
-        .data() |>
-        ggplot2::ggplot(ggplot2::aes(x = date, y = count))
+    if (isTRUE(is_valid_package())) {
+      if (input$cumulative |> as.logical() |> isFALSE()) {
+        out <-
+          .data() |>
+          ggplot2::ggplot(ggplot2::aes(x = date, y = count))
+      } else {
+        out <-
+          .data() |>
+          ggplot2::ggplot(ggplot2::aes(x = date, y = cum_sum))
+      }
+
+      if (input$view == "yearly") {
+        out <-
+          out +
+          ggplot2::geom_col(linewidth = 0, fill = color_primary) +
+          ggplot2::labs(x = "Year", y = "Downloads")
+      } else if (input$view == "monthly") {
+        out <-
+          out +
+          ggplot2::geom_line(
+            color = color_primary,
+            linewidth = 1
+          ) +
+          tsibble::scale_x_yearmonth() +
+          ggplot2::labs(x = "Date", y = "Downloads")
+      } else if (input$view == "weekly") {
+        out <-
+          out +
+          ggplot2::geom_line(
+            color = color_primary,
+            linewidth = 1
+          ) +
+          tsibble::scale_x_yearweek() +
+          ggplot2::labs(x = "Date", y = "Downloads")
+      } else if (input$view == "daily") {
+        out <-
+          out +
+          ggplot2::geom_line(
+            color = color_primary,
+            linewidth = 1
+          ) +
+          ggplot2::labs(x = "Date", y = "Downloads")
+      }
+
+      out |> plotly::ggplotly()
     } else {
-      out <-
-        .data() |>
-        ggplot2::ggplot(ggplot2::aes(x = date, y = cum_sum))
+      ggplot2::ggplot() +
+        ggplot2::geom_blank() +
+        ggplot2::theme_void()
     }
-
-    if (input$view == "yearly") {
-      out <-
-        out +
-        ggplot2::geom_col(linewidth = 0, fill = color_primary) +
-        ggplot2::labs(x = "Year", y = "Downloads")
-    } else if (input$view == "monthly") {
-      out <-
-        out +
-        ggplot2::geom_line(
-          color = color_primary,
-          linewidth = 1
-        ) +
-        tsibble::scale_x_yearmonth() +
-        ggplot2::labs(x = "Date", y = "Downloads")
-    } else if (input$view == "weekly") {
-      out <-
-        out +
-        ggplot2::geom_line(
-          color = color_primary,
-          linewidth = 1
-        ) +
-        tsibble::scale_x_yearweek() +
-        ggplot2::labs(x = "Date", y = "Downloads")
-    } else if (input$view == "daily") {
-      out <-
-        out +
-        ggplot2::geom_line(
-          color = color_primary,
-          linewidth = 1
-        ) +
-        ggplot2::labs(x = "Date", y = "Downloads")
-    }
-
-    out |> plotly::ggplotly()
   })
 
-  output$plot <-
-    plotly::renderPlotly({plot()})
+  output$plot <- plotly::renderPlotly({plot()})
 
   output$data <- DT::renderDT({
     .data() |>
