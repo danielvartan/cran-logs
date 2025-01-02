@@ -15,6 +15,7 @@ library(rlang)
 # library(shinybusy)
 # library(shinyjs)
 # library(showtext)
+library(shinyvalidate)
 # library(sysfonts)
 # library(thematic)
 # library(tsibble)
@@ -72,12 +73,6 @@ ui <- bslib::page_fillable(
           label = "Package",
           value = "mctq",
           width = "100%"
-        ),
-        shiny::tags$p(
-          shiny::tags$span(
-            shiny::textOutput("package_feedback", inline = TRUE),
-            class = "assertion"
-          )
         )
       ),
       shiny::tags$div(
@@ -107,25 +102,21 @@ ui <- bslib::page_fillable(
       bslib::value_box(
         title = "Last Day",
         value = shiny::textOutput("last_day"),
-        # showcase = bsicons::bs_icon("graph-up"),
         theme = "primary"
       ),
       bslib::value_box(
         title = "Last Week",
         value = shiny::textOutput("last_week"),
-        # showcase = bsicons::bs_icon("graph-up"),
         theme = "primary"
       ),
       bslib::value_box(
         title = "Last Month",
         value = shiny::textOutput("last_month"),
-        # showcase = bsicons::bs_icon("graph-up"),
         theme = "primary"
       ),
       bslib::value_box(
         title = "Grand Total",
         value = shiny::textOutput("total"),
-        # showcase = bsicons::bs_icon("graph-up"),
         theme = "primary"
       )
     ),
@@ -153,10 +144,17 @@ ui <- bslib::page_fillable(
           selected = "weekly",
           width = "100%"
         ),
-        shiny::checkboxInput(
-          inputId = "cumulative",
-          label = "Cumulative?",
-          value = FALSE
+        shiny::tags$div(
+          shiny::checkboxInput(
+            inputId = "columns",
+            label = "Columns?",
+            value = FALSE
+          ),
+          shiny::checkboxInput(
+            inputId = "cumulative",
+            label = "Cumulative?",
+            value = FALSE
+          )
         ),
         shiny::tags$div(
           shiny::tags$p(
@@ -240,13 +238,19 @@ server <- function(input, output, session) { #nolint
   }) |>
     shiny::bindEvent(input$package)
 
-  output$package_feedback <- shiny::reactive({
-    if (isTRUE(is_valid_package())) {
-      shiny::validate(
-        shiny::need(input$package, "Package not found.")
-      )
-    }
-  })
+  iv <- shinyvalidate::InputValidator$new()
+
+  iv$add_rule("package", shinyvalidate::sv_required())
+
+  iv$add_rule(
+    "package",
+    shinyvalidate::sv_in_set(
+      set = available_packages,
+      message_fmt = "Package not found."
+    )
+  )
+
+  iv$enable()
 
   ## Get package data -----
 
@@ -371,48 +375,37 @@ server <- function(input, output, session) { #nolint
 
   plot <- shiny::reactive({
     if (isTRUE(is_valid_package())) {
-      if (input$cumulative |> as.logical() |> isFALSE()) {
-        out <-
-          .data() |>
-          ggplot2::ggplot(ggplot2::aes(x = date, y = count))
-      } else {
+      if (input$cumulative |> as.logical() |> isTRUE()) {
         out <-
           .data() |>
           ggplot2::ggplot(ggplot2::aes(x = date, y = cum_sum))
+      } else {
+        out <-
+          .data() |>
+          ggplot2::ggplot(ggplot2::aes(x = date, y = count))
+      }
+
+      if (input$columns |> as.logical() |> isTRUE()) {
+        out <-
+          out +
+          ggplot2::geom_col(fill = color_primary, linewidth = 0)
+      } else {
+        out <-
+          out +
+          ggplot2::geom_line(color = color_primary, linewidth = 1)
       }
 
       if (input$view == "yearly") {
-        out <-
-          out +
-          ggplot2::geom_col(linewidth = 0, fill = color_primary) +
-          ggplot2::labs(x = "Year", y = "Downloads")
+        out <- out + ggplot2::geom_col(linewidth = 0, fill = color_primary)
       } else if (input$view == "monthly") {
-        out <-
-          out +
-          ggplot2::geom_line(
-            color = color_primary,
-            linewidth = 1
-          ) +
-          tsibble::scale_x_yearmonth() +
-          ggplot2::labs(x = "Date", y = "Downloads")
+        out <- out + tsibble::scale_x_yearmonth()
       } else if (input$view == "weekly") {
-        out <-
-          out +
-          ggplot2::geom_line(
-            color = color_primary,
-            linewidth = 1
-          ) +
-          tsibble::scale_x_yearweek() +
-          ggplot2::labs(x = "Date", y = "Downloads")
+        out <- out + tsibble::scale_x_yearweek()
       } else if (input$view == "daily") {
-        out <-
-          out +
-          ggplot2::geom_line(
-            color = color_primary,
-            linewidth = 1
-          ) +
-          ggplot2::labs(x = "Date", y = "Downloads")
+        NULL
       }
+
+      out <- out + ggplot2::labs(x = "Year", y = "Downloads")
 
       out |> plotly::ggplotly()
     } else {
