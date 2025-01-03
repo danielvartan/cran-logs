@@ -15,7 +15,7 @@ library(rlang)
 # library(shinybusy)
 # library(shinyjs)
 # library(showtext)
-library(shinyvalidate)
+# library(shinyvalidate)
 # library(sysfonts)
 # library(thematic)
 # library(tsibble)
@@ -38,7 +38,7 @@ ui <- bslib::page_fillable(
     bg = "white",
     fg = "black",
     primary = color_primary,
-    base_font = bslib::font_google("Noto Sans") # "Pacifico"
+    base_font = bslib::font_google("Noto Sans")
     # code_font = bslib::font_google("Noto Sans Mono")
   ),
 
@@ -180,7 +180,8 @@ ui <- bslib::page_fillable(
               shiny::textOutput("median", inline = TRUE),
               class = "sidepanel-stats"
             )
-          )
+          ),
+          id = "sidepanel-stats-div"
         ),
         width = 300
       ),
@@ -201,8 +202,8 @@ ui <- bslib::page_fillable(
 
 # Set server ----
 
-server <- function(input, output, session) { #nolint
-  ## Get and set package URL query -----
+server <- function(input, output, session) { # nolint
+  ## Get and set package URI query -----
 
   shiny::observe({
     query <- parseQueryString(session$clientData$url_search)
@@ -252,7 +253,7 @@ server <- function(input, output, session) { #nolint
 
   iv$enable()
 
-  ## Get package data -----
+  ## Get download data -----
 
   data <- shiny::reactive({
     start_date <- as.Date("2020-01-01")
@@ -293,13 +294,13 @@ server <- function(input, output, session) { #nolint
 
   filtered_data <- shiny::reactive({
     data() |>
-    dplyr::filter(
-      dplyr::between(
-        date,
-        input$date_range[1] |> as.Date(),
-        input$date_range[2] |> as.Date()
+      dplyr::filter(
+        dplyr::between(
+          date,
+          input$date_range[1] |> as.Date(),
+          input$date_range[2] |> as.Date()
+        )
       )
-    )
   })
 
   ## Compute value box statistics -----
@@ -396,7 +397,7 @@ server <- function(input, output, session) { #nolint
       }
 
       if (input$view == "yearly") {
-        out <- out + ggplot2::geom_col(linewidth = 0, fill = color_primary)
+        NULL
       } else if (input$view == "monthly") {
         out <- out + tsibble::scale_x_yearmonth()
       } else if (input$view == "weekly") {
@@ -415,13 +416,21 @@ server <- function(input, output, session) { #nolint
     }
   })
 
-  output$plot <- plotly::renderPlotly({plot()})
+  output$plot <- plotly::renderPlotly({plot()}) # nolint
 
-  output$data <- DT::renderDT({
-    .data() |>
-      dplyr::as_tibble() |>
-      dplyr::mutate(date = as.character(date))
-  })
+  output$data <- DT::renderDT(
+    {
+      .data() |>
+        dplyr::as_tibble() |>
+        dplyr::mutate(date = as.character(date))
+    },
+    extensions = "Buttons",
+    options = list(
+      dom = "Bfrtip",
+      buttons = c("copy", "csv", "print")
+    ),
+    server = FALSE
+  )
 }
 
 # Compile app ----

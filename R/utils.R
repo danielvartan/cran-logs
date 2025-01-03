@@ -21,9 +21,9 @@ get_last_month <- function(date = Sys.Date()) {
   lubridate::interval(
     start =
       lubridate::floor_date(date, unit = "month") -
-      lubridate::period(1, "month"),
+      lubridate::period(1, "month"), # nolint
     end = lubridate::floor_date(date, unit = "month") -
-      lubridate::period(1, "day")
+      lubridate::period(1, "day") # nolint
   )
 }
 
@@ -31,7 +31,7 @@ get_last_month <- function(date = Sys.Date()) {
 # library(lubridate)
 # library(prettycheck) # github.com/danielvartan/prettycheck
 
-sum_interval <- function(data , int) {
+sum_interval <- function(data, int) {
   prettycheck:::assert_tibble(data)
   prettycheck:::assert_interval(int)
   prettycheck:::assert_subset(c("date", "count"), names(data))
@@ -44,7 +44,7 @@ sum_interval <- function(data , int) {
         lubridate::int_end(int)
       )
     ) |>
-    dplyr::pull(count) |>
+    dplyr::pull(count) |> # nolint
     sum(na.rm = TRUE)
 }
 
@@ -54,11 +54,11 @@ sum_interval <- function(data , int) {
 # library(tsibble)
 
 aggregate_tsibble_index <- function(
-    data,
-    unit,
-    fun = \(x) sum(x, na.rm = TRUE),
-    week_start = 1
-  ) {
+  data,
+  unit,
+  fun = \(x) sum(x, na.rm = TRUE),
+  week_start = 1
+  ) { # nolint
   unit_choices <- c("day", "week", "month", "quarter", "year")
   unit_choices <- c(unit_choices, paste0(unit_choices, "s"))
 
