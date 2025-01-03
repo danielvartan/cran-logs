@@ -16,3 +16,5 @@ For more about Shiny and its capabilities, refer to Hadley Wickham's book, [Mast
 
 This repository's code is open source and licensed under the [MIT
 license](https://opensource.org/license/mit/).
+
+![cran-logs](images/print.png)

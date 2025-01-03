@@ -71,7 +71,6 @@ ui <- bslib::page_fillable(
         shiny::textInput(
           inputId = "package",
           label = "Package",
-          value = "mctq",
           width = "100%"
         )
       ),
@@ -213,6 +212,12 @@ server <- function(input, output, session) { # nolint
         session,
         inputId = "package",
         value = query[["package"]]
+      )
+    } else {
+      shiny::updateTextInput(
+        session,
+        inputId = "package",
+        value = "mctq"
       )
     }
   })
