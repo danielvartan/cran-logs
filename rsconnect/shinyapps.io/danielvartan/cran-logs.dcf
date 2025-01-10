@@ -5,7 +5,7 @@ account: danielvartan
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 13656811
-bundleId: 9598519
+bundleId: 9633692
 url: https://danielvartan.shinyapps.io/cran-logs/
 version: 1
 asMultiple: FALSE

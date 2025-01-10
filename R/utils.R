@@ -1,32 +1,3 @@
-# library(lubridate)
-# library(prettycheck) # github.com/danielvartan/prettycheck
-
-get_last_week <- function(date = Sys.Date()) {
-  prettycheck:::assert_date(date)
-
-  lubridate::interval(
-    start =
-      lubridate::floor_date(date, unit = "week") -
-      lubridate::period(1, "week"),
-    end = lubridate::floor_date(date, unit = "week") - lubridate::days(1)
-  )
-}
-
-# library(lubridate)
-# library(prettycheck) # github.com/danielvartan/prettycheck
-
-get_last_month <- function(date = Sys.Date()) {
-  prettycheck:::assert_date(date)
-
-  lubridate::interval(
-    start =
-      lubridate::floor_date(date, unit = "month") -
-      lubridate::period(1, "month"), # nolint
-    end = lubridate::floor_date(date, unit = "month") -
-      lubridate::period(1, "day") # nolint
-  )
-}
-
 # library(dplyr)
 # library(lubridate)
 # library(prettycheck) # github.com/danielvartan/prettycheck

@@ -4,20 +4,14 @@
 # library(bslib)
 # library(dplyr)
 library(ggplot2)
-# library(glue)
 # library(here)
+library(lubritime) # github.com/danielvartan/lubritime
 library(magrittr)
-# library(openssl)
 # library(plotly)
 # library(ragg)
 library(rlang)
-# library(shiny)
-# library(shinybusy)
-# library(shinyjs)
-# library(showtext)
+library(shiny)
 # library(shinyvalidate)
-# library(sysfonts)
-# library(thematic)
 # library(tsibble)
 
 # Source scripts ----
@@ -54,12 +48,8 @@ ui <- bslib::page_fillable(
 
   ## Add busy indicator -----
 
-  shinybusy::add_busy_bar(
-    timeout = 1000,
-    color = "#F5C827",
-    centered = TRUE,
-    height = "10px"
-  ),
+  shiny::useBusyIndicators(spinners = FALSE, pulse = TRUE),
+  shiny::busyIndicatorOptions(pulse_height = "10px"),
 
   ## Set body -----
 
@@ -322,7 +312,7 @@ server <- function(input, output, session) { # nolint
 
   output$last_month <- shiny::reactive({
     if (isTRUE(is_valid_package())) {
-      filtered_data() |> sum_interval(get_last_month(Sys.Date()))
+      filtered_data() |> sum_interval(lubritime::get_last_month(Sys.Date()))
     } else {
       as.numeric(NA)
     }
@@ -330,7 +320,7 @@ server <- function(input, output, session) { # nolint
 
   output$last_week <- shiny::reactive({
     if (isTRUE(is_valid_package())) {
-      filtered_data() |> sum_interval(get_last_week(Sys.Date()))
+      filtered_data() |> sum_interval(lubritime::get_last_week(Sys.Date()))
     } else {
       as.numeric(NA)
     }

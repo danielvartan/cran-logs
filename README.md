@@ -8,7 +8,7 @@ MIT](https://img.shields.io/badge/license-MIT-green)](https://choosealicense.com
 
 ✨📦📊🧬📉️📐💻🛠️🖇️📈🕵
 
-A [Shiny](https://shiny.posit.co/) dashboard designed to analyze and visualize CRAN package download statistics.
+A [Shiny](https://shiny.posit.co/) dashboard designed to analyze and visualize package download statistics from The Comprehensive R Archive Network ([CRAN](https://cran.r-project.org/)).
 
 The dashboard also supports query strings. For example: <https://danielvartan.shinyapps.io/cran-logs/?package=dplyr>.
 

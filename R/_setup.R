@@ -1,15 +1,11 @@
 # Load libraries -----
 
-library(bsicons)
 # library(bslib)
 library(ggplot2)
 library(magrittr)
 library(ragg)
 library(rlang)
 # library(shiny)
-library(shinyjs)
-library(showtext)
-# library(sysfonts)
 # library(thematic)
 
 # Set general options -----
