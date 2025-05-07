@@ -1,12 +1,9 @@
 # cran-logs
 
 <!-- badges: start -->
-[![Project Status: Inactive – The project has reached a stable, usable state but is no longer being actively developed; support/maintenance will be provided as time allows.](https://www.repostatus.org/badges/latest/inactive.svg)](https://www.repostatus.org/#inactive)
-[![License:
-MIT](https://img.shields.io/badge/license-MIT-green)](https://choosealicense.com/licenses/mit/)
+[![Project Status: Inactive – The project has reached a stable, usable state but is no longer being actively developed; support/maintenance will be provided as time allows.](https://img.shields.io/badge/Repo%20Status-Inactive-A6A82D.svg)](https://www.repostatus.org/#inactive)
+[![License: MIT](https://img.shields.io/badge/License-MIT-10D810.svg)](https://choosealicense.com/licenses/mit/)
 <!-- badges: end -->
-
-✨📦📊🧬📉️📐💻🛠️🖇️📈🕵
 
 A [Shiny](https://shiny.posit.co/) dashboard designed to analyze and visualize package download statistics from The Comprehensive R Archive Network ([CRAN](https://cran.r-project.org/)).
 

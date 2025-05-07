@@ -214,12 +214,8 @@ server <- function(input, output, session) { # nolint
 
   # Check `package` input -----
 
-  ## Last update: 2025-01-02
-  #
-  # available_packages <-
-  #   utils::available.packages() |>
-  #   dplyr::as_tibble() |>
-  #   dplyr::pull(Package)
+  ## Package update: 2025-05-07
+  ## See "R/update_package.R" for details
 
   available_packages <-
     here::here("www", "available-packages.txt") |>
@@ -255,16 +251,40 @@ server <- function(input, output, session) { # nolint
     end_date <- Sys.Date()
 
     if (isTRUE(is_valid_package())) {
-      adjustedcranlogs::adj_cran_downloads(
-        packages = input$package |> trimws(),
-        from = start_date,
-        to = end_date
-      ) |>
-        dplyr::select(date, adjusted_downloads, adjusted_total_downloads) |>
-        dplyr::rename(
-          count = adjusted_downloads,
-          cum_sum = adjusted_total_downloads
-        ) |>
+      cran_logs <- try(
+        adjustedcranlogs::adj_cran_downloads(
+          packages = input$package |> trimws(),
+          from = start_date,
+          to = end_date
+        ),
+        silent = TRUE
+      )
+
+      if (inherits(cran_logs, "try-error")) {
+        cran_logs <-
+          cranlogs::cran_downloads(
+            packages = input$package |> trimws(),
+            from = start_date,
+            to = end_date
+          ) |>
+          dplyr::as_tibble() |>
+          dplyr::select(date, count) |>
+          dplyr::mutate(cum_sum = cumsum(count))
+      } else {
+        cran_logs <-
+          cran_logs |>
+          dplyr::select(
+            date,
+            adjusted_downloads,
+            adjusted_total_downloads
+          ) |>
+          dplyr::rename(
+            count = adjusted_downloads,
+            cum_sum = adjusted_total_downloads
+          )
+      }
+
+      cran_logs |>
         dplyr::select(date, count, cum_sum) |>
         dplyr::slice(seq(which(.data$count > 0)[1], dplyr::n())) |>
         dplyr::summarise(

@@ -2,10 +2,12 @@
 
 # library(bslib)
 library(ggplot2)
+library(httpgd) # github.com/nx10/httpgd
 library(magrittr)
 library(ragg)
 library(rlang)
 # library(shiny)
+library(vscDebugger) # github.com/ManuelHentschel/vscDebugger
 # library(thematic)
 
 # Set general options -----

@@ -1,22 +1,7 @@
 # # For development use only (comment out the code after use)
 #
-# .rs.restartR()
-# .libPaths()
-# lintr::use_lintr()
-# lintr::lint_dir("R")
-# normalizePath(readClipboard(), "/", mustWork = FALSE)
-# renv::init()
-# renv::equip()
-# renv::activate()
-# renv::deactivate()
-# renv::status()
-# renv::dependencies("R/quarto-setup.R")
-# renv::install()
-# renv::update()
-# renv::restore()
-# renv::snapshot()
-# renv::clean(actions = "unsed.packages")
-# spelling::spell_check_files("README.md")
+# shiny::runApp()
+# rsconnect::deployApp()
 
 # # Shiny links
 #
