@@ -3,6 +3,8 @@
 # shiny::runApp()
 # rsconnect::deployApp()
 
+# Shiny is not working with VScode. Investigate the issue.
+
 # # Shiny links
 #
 # * Shiny tutorial: <https://shiny.posit.co/r/getstarted>.

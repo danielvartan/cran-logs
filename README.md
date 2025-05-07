@@ -5,13 +5,19 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-10D810.svg)](https://choosealicense.com/licenses/mit/)
 <!-- badges: end -->
 
-A [Shiny](https://shiny.posit.co/) dashboard designed to analyze and visualize package download statistics from The Comprehensive R Archive Network ([CRAN](https://cran.r-project.org/)).
+## Overview
 
-The dashboard also supports query strings. For example: <https://danielvartan.shinyapps.io/cran-logs/?package=dplyr>.
+`cran-logs` is a [Shiny](https://shiny.posit.co/) dashboard for visualizing package download statistics from the Comprehensive R Archive Network ([CRAN](https://cran.r-project.org/)).
 
-For more about Shiny and its capabilities, refer to Hadley Wickham's book, [Mastering Shiny](https://mastering-shiny.org).
+The dashboard supports query strings for direct access to specific package statistics. For example: <https://danielvartan.shinyapps.io/cran-logs/?package=dplyr>.
 
-This repository's code is open source and licensed under the [MIT
-license](https://opensource.org/license/mit/).
+To learn more about Shiny and its features, see Hadley Wickham's [Mastering Shiny](https://mastering-shiny.org) book.
 
 ![cran-logs](images/print.png)
+
+## License
+
+[![License:
+MIT](https://img.shields.io/badge/License-MIT-10D810.svg)](https://choosealicense.com/licenses/mit/)
+
+`cran-logs` code is released under the [MIT license](https://opensource.org/license/mit).
