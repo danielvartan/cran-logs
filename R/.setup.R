@@ -14,6 +14,15 @@ options(
   shiny.useragg = TRUE
 )
 
+# Set CRAN mirror -----
+
+if (
+  getOption("repos")["CRAN"] == "@CRAN@" ||
+    is.na(getOption("repos")["CRAN"])
+) {
+  options(repos = c(CRAN = "https://cloud.r-project.org"))
+}
+
 # Set variables -----
 
 set.seed(2025)
