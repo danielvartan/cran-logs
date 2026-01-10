@@ -1,14 +1,9 @@
 # Load libraries -----
 
-# library(bslib)
 library(ggplot2)
-library(httpgd) # github.com/nx10/httpgd
-library(magrittr)
 library(ragg)
-library(rlang)
-# library(shiny)
-library(vscDebugger) # github.com/ManuelHentschel/vscDebugger
-# library(thematic)
+library(shiny)
+library(thematic)
 
 # Set general options -----
 
@@ -27,12 +22,12 @@ color_primary <- "#0559BE"
 
 # Set `ggplot2` theme -----
 
-ggplot2::theme_set(
-  ggplot2::theme_bw(
+theme_set(
+  theme_bw(
     base_size = 14
   )
 )
 
-thematic::thematic_shiny(
+thematic_shiny(
   font = "auto"
 )

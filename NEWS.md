@@ -4,6 +4,7 @@
 - The license was changed from MIT to GPL-3.
 - The list of available packages is now fetched dynamically from CRAN instead of being hardcoded.
 - Packages are now called into memory instead of being called directly.
+- The `renv` dependencies were updated.
 - The documentation was updated to reflect the changes.
 
 # v1.0.0 (2025-01-10)
