@@ -14,7 +14,7 @@ The dashboard supports query strings for direct access to specific package stati
 
 To learn more about [Shiny](https://shiny.posit.co/) and its features, see Hadley Wickham's book [Mastering Shiny](https://mastering-shiny.org).
 
-![cran-logs](images/print.png)
+![cran-logs](images/interface.png)
 
 ## Contributing
 

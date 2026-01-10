@@ -1,4 +1,4 @@
-# Load packages ----
+# Load Packages ----
 
 library(adjustedcranlogs)
 library(bsicons)
@@ -18,15 +18,16 @@ library(shinyvalidate)
 library(stats)
 library(tsibble)
 
-# Source scripts ----
+# Source Scripts ----
 
 here("R", ".setup.R") |> source()
-here("R", "utils.R") |> source()
+here("R", "aggregate_tsibble_index.R") |> source()
+here("R", "sum_interval.R") |> source()
 
 # Set UI ----
 
 ui <- page_fillable(
-  ## Set header -----
+  ## Set Header -----
 
   title = "CRAN Package Download Statistics",
   lang = "en",
@@ -50,12 +51,12 @@ ui <- page_fillable(
 
   here("www", "github-corners.html") |> includeHTML(),
 
-  ## Add busy indicator -----
+  ## Add Busy Indicator -----
 
   useBusyIndicators(spinners = FALSE, pulse = TRUE),
   busyIndicatorOptions(pulse_height = "10px"),
 
-  ## Set body -----
+  ## Set Body -----
 
   layout_columns(
     col_widths = c(-1, 10, -1),
@@ -193,7 +194,7 @@ ui <- page_fillable(
   )
 )
 
-# Set server ----
+# Set Server ----
 
 server <- function(input, output, session) {
   ## Get and Set Package URI Query -----
@@ -454,6 +455,6 @@ server <- function(input, output, session) {
   )
 }
 
-# Compile app ----
+# Compile App ----
 
 shinyApp(ui = ui, server = server)
