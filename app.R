@@ -353,7 +353,7 @@ server <- function(input, output, session) {
   output$last_day <- reactive({
     if (isTRUE(is_valid_package())) {
       filtered_data() |>
-        slice(nrow(filtered_data()) - 1) |>
+        slice_tail(n = 1) |>
         pull(count) |>
         sum(na.rm = TRUE)
     } else {
