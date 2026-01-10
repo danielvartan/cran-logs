@@ -7,10 +7,10 @@
 
 # # Shiny Resources
 #
-# * Shiny tutorial: <https://shiny.posit.co/r/getstarted>.
-# * Shine cheat sheet:
-#   <https://github.com/rstudio/cheatsheets/raw/main/shiny.pdf>.
-# * Shiny articles: <https://shiny.posit.co/r/articles/>.
-# * Shiny Gallery: <https://shiny.rstudio.com/gallery/>.
-# * Mastering Shiny (book): <https://mastering-shiny.org/>.
-# * {bslib}: <https://rstudio.github.io/bslib>.
+# * Shiny tutorial: <https://shiny.posit.co/r/getstarted>
+# * Shiny cheat sheet:
+#   <https://github.com/rstudio/cheatsheets/raw/main/shiny.pdf>
+# * Shiny articles: <https://shiny.posit.co/r/articles/>
+# * Shiny Gallery: <https://shiny.rstudio.com/gallery/>
+# * Mastering Shiny (book): <https://mastering-shiny.org/>
+# * bslib: <https://rstudio.github.io/bslib>
