@@ -5,9 +5,6 @@ account: danielvartan
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 13656811
-bundleId: 10244628
+bundleId: 11427357
 url: https://danielvartan.shinyapps.io/cran-logs/
 version: 1
-asMultiple: FALSE
-asStatic: FALSE
-ignoredFiles: .vscode/settings.json|R/update_packages.R
