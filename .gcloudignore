@@ -1,0 +1,33 @@
+# Files not uploaded to Cloud Build.
+#
+# Without this file, `gcloud builds submit` falls back to `.gitignore` to
+# decide what to send. That file excludes `data/`, which the image needs, so
+# the build fails at `COPY data ./data`. Keep the two in sync by hand: the
+# rules here are deliberately different.
+
+.gcloudignore
+.git
+.gitignore
+
+# Secrets. The PIN reaches the container through Cloud Run, never the image.
+
+.Renviron
+.secrets
+
+# Development leftovers.
+
+.quarto
+.Rproj.user
+.temp
+.vscode
+_freeze
+docs
+**/*.Rproj
+**/.DS_Store
+**/.Rhistory
+**/.RData
+
+# renv activates a project library that does not exist in the image.
+
+.Rprofile
+renv/

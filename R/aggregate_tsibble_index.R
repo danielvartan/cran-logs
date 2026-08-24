@@ -1,7 +1,6 @@
 library(checkmate)
 library(dplyr)
 library(lubridate)
-library(prettycheck) # github.com/danielvartan/prettycheck
 library(tsibble)
 
 aggregate_tsibble_index <- function(
@@ -10,7 +9,6 @@ aggregate_tsibble_index <- function(
   fun = \(x) sum(x, na.rm = TRUE),
   week_start = 1
 ) {
-  # nolint
   unit_choices <- c("day", "week", "month", "quarter", "year")
   unit_choices <- c(unit_choices, paste0(unit_choices, "s"))
 
@@ -47,5 +45,5 @@ aggregate_tsibble_index <- function(
         .fns = fun
       )
     ) |>
-    rename_with(~ gsub("^.index2$", index_var, .x))
+    rename_with(\(x) gsub("^.index2$", index_var, x))
 }

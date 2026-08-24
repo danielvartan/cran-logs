@@ -2,5 +2,16 @@
 .RData
 .Renviron
 .Rhistory
-.Rproj.user
 .Ruserdata
+.secrets
+*.knit.md
+*.utf8.md
+**/*.quarto_ipynb
+/_freeze/
+/.Rproj.user/
+/*_cache/
+/cache/
+/data-input/
+/data-raw/
+/data/
+index.rmarkdown

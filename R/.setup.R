@@ -1,11 +1,11 @@
-# Load libraries -----
+# Load Packages -----
 
 library(ggplot2)
 library(ragg)
 library(shiny)
 library(thematic)
 
-# Set general options -----
+# Set Options -----
 
 options(
   scipen = 10,
@@ -14,7 +14,7 @@ options(
   shiny.useragg = TRUE
 )
 
-# Set CRAN mirror -----
+# Set CRAN Mirror -----
 
 if (
   getOption("repos")["CRAN"] == "@CRAN@" ||
@@ -23,13 +23,11 @@ if (
   options(repos = c(CRAN = "https://cloud.r-project.org"))
 }
 
-# Set variables -----
-
-set.seed(2025)
+# Set Variables -----
 
 color_primary <- "#0559BE"
 
-# Set `ggplot2` theme -----
+# Set `ggplot2` Theme -----
 
 theme_set(
   theme_bw(

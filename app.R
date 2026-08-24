@@ -8,7 +8,6 @@ library(dplyr)
 library(DT)
 library(ggplot2)
 library(here)
-library(lubritime) # github.com/danielvartan/lubritime
 library(magrittr)
 library(plotly)
 library(ragg)
@@ -22,6 +21,7 @@ library(tsibble)
 
 here("R", ".setup.R") |> source()
 here("R", "aggregate_tsibble_index.R") |> source()
+here("R", "get_last.R") |> source()
 here("R", "sum_interval.R") |> source()
 
 # Set UI ----
@@ -457,4 +457,4 @@ server <- function(input, output, session) {
 
 # Compile App ----
 
-shinyApp(ui = ui, server = server)
+shinyApp(ui, server)

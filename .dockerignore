@@ -1,0 +1,16 @@
+.git
+.gcloudignore
+.github
+.quarto
+.Renviron
+.Rproj.user
+.temp
+.vscode
+**/*.Rproj
+**/.DS_Store
+docs
+
+# renv activates a project library that does not exist in the image.
+
+.Rprofile
+renv/

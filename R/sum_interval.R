@@ -1,13 +1,10 @@
-library(prettycheck) # github.com/danielvartan/prettycheck
-
 library(checkmate)
 library(dplyr)
 library(lubridate)
-library(prettycheck) # github.com/danielvartan/prettycheck
 
 sum_interval <- function(data, int) {
   assert_tibble(data)
-  assert_interval(int)
+  assert_class(int, "Interval")
   assert_subset(c("date", "count"), names(data))
 
   data |>
